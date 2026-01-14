@@ -1,12 +1,11 @@
+using System.Linq.Expressions;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using System.Collections.Generic;
-
-namespace DataAccess.Concrete.InMemory;
 
 public class InMemoryProductDal : IProductDal
 {
     List<Product> _products;
+
     public InMemoryProductDal()
     {
         _products = new List<Product>
@@ -19,6 +18,7 @@ public class InMemoryProductDal : IProductDal
             new Product{ProductId=6,CategoryId=2,ProductName="Mouse",UnitPrice=15,UnitInStock=15}
         };
     }
+
     public void Add(Product product)
     {
         _products.Add(product);
@@ -26,8 +26,14 @@ public class InMemoryProductDal : IProductDal
 
     public void Delete(Product product)
     {
-        Product productToDelete = _products.SingleOrDefault(p => p.ProductId == product.ProductId);
-        _products.Remove(productToDelete);
+        var productToDelete = _products.SingleOrDefault(p => p.ProductId == product.ProductId);
+        if (productToDelete != null)
+            _products.Remove(productToDelete);
+    }
+
+    public Product Get(Expression<Func<Product, bool>> filter)
+    {
+        return _products.SingleOrDefault(filter.Compile());
     }
 
     public List<Product> GetAll()
@@ -35,12 +41,22 @@ public class InMemoryProductDal : IProductDal
         return _products;
     }
 
+    public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
+    {
+        return filter == null
+            ? _products
+            : _products.Where(filter.Compile()).ToList();
+    }
+
     public void Update(Product product)
     {
-        Product productToUpdate = _products.SingleOrDefault(p => p.ProductId == product.ProductId);
-        productToUpdate.ProductName = product.ProductName;
-        productToUpdate.CategoryId = product.CategoryId;
-        productToUpdate.UnitPrice = product.UnitPrice;
-        productToUpdate.UnitInStock = product.UnitInStock;
+        var productToUpdate = _products.SingleOrDefault(p => p.ProductId == product.ProductId);
+        if (productToUpdate != null)
+        {
+            productToUpdate.ProductName = product.ProductName;
+            productToUpdate.CategoryId = product.CategoryId;
+            productToUpdate.UnitPrice = product.UnitPrice;
+            productToUpdate.UnitInStock = product.UnitInStock;
+        }
     }
 }
