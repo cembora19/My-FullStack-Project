@@ -31,7 +31,7 @@ public class InMemoryProductDal : IProductDal
             _products.Remove(productToDelete);
     }
 
-    public Product Get(Expression<Func<Product, bool>> filter)
+    public Product? Get(Expression<Func<Product, bool>> filter)
     {
         return _products.SingleOrDefault(filter.Compile());
     }
@@ -41,7 +41,7 @@ public class InMemoryProductDal : IProductDal
         return _products;
     }
 
-    public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
+    public List<Product> GetAll(Expression<Func<Product, bool>>? filter = null)
     {
         return filter == null
             ? _products
