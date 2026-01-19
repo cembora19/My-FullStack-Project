@@ -1,4 +1,4 @@
-namespace Core.Utilities.Result;
+namespace Core.Utilities.Results;
 
 public class ErrorResult : Result
 {
