@@ -1,3 +1,4 @@
+using Core.Utilities.Result;
 using Entities.Concrete;
 using Entities.DTOs;
 
@@ -9,4 +10,6 @@ public interface IProductService
     List<Product> GetAllByCategoryId(int id);
     List<Product> GeyByUnitPrice(decimal min, decimal max);
     List<ProductDetailDto> GetProductDetails();
+    Product? GetById(int productId);
+    IResult Add(Product product);
 }

@@ -1,4 +1,5 @@
 using Business.Abstract;
+using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -14,6 +15,16 @@ public class ProductManager : IProductService
         _productDal = productDal;
     }
 
+    public IResult Add(Product product)
+    {
+        if (product.ProductName.Length < 2)
+        {
+            return new ErrorResult("Ürün ismi en az 2 karakter olmalidir");
+        }
+        _productDal.Add(product);
+        return new SuccessResult("ürün eklendi");
+    }
+
     public List<Product> GetAll()
     {
         return _productDal.GetAll();
@@ -22,6 +33,11 @@ public class ProductManager : IProductService
     public List<Product> GetAllByCategoryId(int id)
     {
         return _productDal.GetAll(p => p.CategoryId == id);
+    }
+
+    public Product? GetById(int productId)
+    {
+        return _productDal.Get(p => p.ProductId == productId);
     }
 
     public List<ProductDetailDto> GetProductDetails()
