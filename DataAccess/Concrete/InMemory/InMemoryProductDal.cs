@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 public class InMemoryProductDal : IProductDal
 {
@@ -46,6 +47,11 @@ public class InMemoryProductDal : IProductDal
         return filter == null
             ? _products
             : _products.Where(filter.Compile()).ToList();
+    }
+
+    public List<ProductDetailDto> GetProductDetails()
+    {
+        throw new NotImplementedException();
     }
 
     public void Update(Product product)
